@@ -14,20 +14,24 @@ class game:
     def playerRegister(self, id):
         if len(self.playerList) >= 2:
             print("playerRegister Failed: Too much player")
-            return
+            return "failed"
         if self.gameStatus != "wait":
             print("playerRegister Failed: Game started")
-            return
+            return "failed"
         self.playerList.append(id)
         self.playerColor[id] = len(self.playerList)    # Set order as color, 1 is white, 2 is black
-    
+        return "finish"
     
     def start(self):
         if len(self.playerList) != 2:
             print("start Failed: Not enough player")
-            return
+            return "failed"
+        if self.gameStatus == "playing":
+            print("already start")
+            return "failed"
         self.gameStatus = "playing"
         self.currPlayer = random.randint(0, 1)
+        return "finish"
     
     
     def playerPutChess(self, id, place):
@@ -76,6 +80,10 @@ class game:
     def switchTurn(self):
         self.currPlayer = (self.currPlayer + 1) % 2
         return
+    
+    
+    def getPlayerList(self):
+        return self.playerList
 
 
 def gameUnitTest():
