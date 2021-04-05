@@ -23,6 +23,8 @@ class center:
     def playGame(self, info):
         if not self.__validPlayer(info):
             return "failed"
+        if self.playerState[info[0]] != "online":
+            return "failed"
         if len(self.waitingList) > 0:
             p2Info = self.waitingList.pop()
             newGame = game()
@@ -54,14 +56,19 @@ class center:
     
     
     def getGameState(self, info):
+        stateStr = ""
+        whosTurn = ""
+        board = []
         if not self.__validPlayer(info):
-            return None
-        if self.playerState[info[0]] != "playing":
-            return self.playerState[info[0]]
-        game = self.games[info[0]]
-        whosTurn = game.whosTurn()
-        board = game.getBoard()
-        return whosTurn, board
+            stateStr = "error"
+        elif self.playerState[info[0]] == "playing":
+            stateStr = self.playerState[info[0]]
+            game = self.games[info[0]]
+            whosTurn = game.whosTurn()
+            board = game.getBoard()
+        else:
+            stateStr = self.playerState[info[0]]
+        return stateStr, whosTurn, board
     
     
     def quitGame(self, info):
@@ -71,7 +78,7 @@ class center:
             return "failed"
         self.playerState[info[0]] = "online"
         if info[0] in self.games:
-            self.__gameEnd(games[info[0]])
+            self.__gameEnd(self.games[info[0]])
         return "finish"
      
     

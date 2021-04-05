@@ -18,6 +18,7 @@ class player:
     
     def getState(self):
         state = self.server.getGameState(self.info)
+        state[1] = bool(state[1] == self.info[0])
         return state
 
 
@@ -28,4 +29,3 @@ class player:
     def quitGame(self):
         res = self.server.quitGame(self.info)
         return res
-
